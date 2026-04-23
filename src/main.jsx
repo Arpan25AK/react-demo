@@ -5,12 +5,35 @@ export default function App(){
 
   const [isLights, setIsLights] = useState(false);
   const [isDoor, setIsDoor] = useState(true);
+  const [isPurpose, setIsPurpose] = useState("")
+
+  function handleChange(e){
+    setIsPurpose(e.target.value);
+  }
+
+  const handleSecurityCheck = (e) => {
+    e.preventDefault();
+    const allowedGuests = ["family", "friend", "ownerWithKey"];
+
+    if(isPurpose.trim() === ""){ 
+      alert("please enter a valid reason");
+      return;
+    }
+
+    if(allowedGuests.includes(isPurpose.trim())){
+      alert("A guest has entered the house");
+    }else{
+      alert(" A stranger has entered the house");
+    }
+  };
 
     useEffect(() => {
       if (isDoor === false) {
         alert("WARNING : THE DOOR IS OPEN!");
       }
     }, [isDoor]);
+
+    
 
   const houseStyle = {
       backgroundColor : isLights ? 'blue' : 'orange',
@@ -63,20 +86,35 @@ export default function App(){
         gap : '30px',
         flexWrap : 'wrap'
       }}>
-
+        {/*lighst button */}
       <div style={controlBoxStyle}>
         <h3 style={{color : 'white', margin : 0}}>Lights</h3>
         <button style={buttonStyle} 
         onClick={() => setIsLights(!isLights)}>
         {isLights ? 'ON' : 'OFF'}</button>
       </div>
-
+      {/*Doors button */}
       <div style={controlBoxStyle}>
         <h3 style={{color : 'white', margin : 0}}>Doors</h3>
         <button style={buttonStyle} 
         onClick = {() => setIsDoor(!isDoor)}>
         {isDoor ? 'OPEN' : 'CLOSE'}</button>
       </div>
+      </div>
+      <br />
+      <br />
+      {/*entry security block*/}
+      <div>
+        <h2 style={{fontFamily : 'cursive', textAlign : 'center'}}>Entry Authorization</h2>
+        <form onSubmit={handleSecurityCheck}>
+          <input type="text"
+          placeholder='Enter prupose'
+          value={isPurpose}
+          onChange={handleChange}
+           />
+           <button type='submit'>Verify Identity</button>
+          
+        </form>
       </div>
     </div>
   );
